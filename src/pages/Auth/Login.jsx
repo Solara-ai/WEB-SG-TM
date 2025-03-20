@@ -14,6 +14,7 @@ const Login = () => {
     e.preventDefault();
     // Add your login logic here
     console.log('Login attempt:', formData);
+    localStorage.setItem("isAuthenticated", "true");
     navigate('/');
   };
 
@@ -79,15 +80,19 @@ const Login = () => {
                 </label>
               </div>
               <div className="text-sm">
-                <a href="#" className="font-medium text-blue-600 hover:text-blue-500">
+                <button 
+                  type="button"
+                  className="font-medium text-gray-600 hover:text-green-500"
+                  onClick={() => alert('Password reset functionality coming soon!')}
+                >
                   Forgot your password?
-                </a>
+                </button>
               </div>
             </div>
 
             <button
               type="submit"
-              className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             >
               Sign In
             </button>
@@ -96,7 +101,7 @@ const Login = () => {
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
               Don't have an account?{' '}
-              <Link to="/register" className="font-medium text-blue-600 hover:text-blue-500">
+              <Link to="/register" className="font-medium text-gray-600 hover:text-green-500">
                 Sign up
               </Link>
             </p>

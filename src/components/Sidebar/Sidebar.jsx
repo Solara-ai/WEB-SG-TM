@@ -1,7 +1,14 @@
 import { FaHome, FaCalendarAlt, FaUser, FaSignOutAlt } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Sidebar = () => {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("isAuthenticated");
+    navigate('/login');
+  };
+
   return (
     <div className="h-screen w-64 bg-gray-800 text-white flex flex-col p-5">
       <h2 className="text-xl font-bold mb-6">Admin Dashboard</h2>
@@ -24,7 +31,10 @@ const Sidebar = () => {
           </li>
         </ul>
       </nav>
-      <button className="mt-auto flex items-center space-x-2 text-red-500 hover:text-red-300">
+      <button 
+        onClick={handleLogout}
+        className="mt-auto flex items-center space-x-2 text-red-500 hover:text-red-300"
+      >
         <FaSignOutAlt /> <span>Logout</span>
       </button>
     </div>

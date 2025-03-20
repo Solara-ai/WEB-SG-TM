@@ -1,28 +1,16 @@
-import './App.css';
-import Dashboard from "./pages/Dashboard/Dashboard";
+import AppRouter from "./routes/Routes";
 import "./index.css";
-
+// import Chatbot from "./components/Chatbot/Chatbot";
+// import Login from "./pages/Auth/Login";
 
 function App() {
-  // return (
-  //   <div className="App">
-  //     <header className="App-header">
-  //       <img src={logo} className="App-logo" alt="logo" />
-  //       <p>
-  //         Edit <code>src/App.js</code> and save to reload.
-  //       </p>
-  //       <a
-  //         className="App-link"
-  //         href="https://reactjs.org"
-  //         target="_blank"
-  //         rel="noopener noreferrer"
-  //       >
-  //         Learn React
-  //       </a>
-  //     </header>
-  //   </div>
-  // );
-  return <Dashboard />;
+  return (
+    <>
+      <AppRouter />
+      {/* <Chatbot /> */}
+      {/* <Login/> */}
+    </>
+  );
 }
 
 export default App;
