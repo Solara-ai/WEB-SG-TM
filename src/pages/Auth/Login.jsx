@@ -79,7 +79,7 @@ const Login = () => {
                   Remember me
                 </label>
               </div>
-              
+
               <div className="text-sm">
                 <button 
                   type="button"
@@ -99,14 +99,14 @@ const Login = () => {
             </button>
           </form>
 
-          <div className="mt-6 text-center">
+          {/* <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
               Don't have an account?{' '}
               <Link to="/register" className="font-medium text-gray-600 hover:text-green-500">
                 Sign up
               </Link>
             </p>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
