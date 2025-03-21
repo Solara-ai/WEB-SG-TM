@@ -8,7 +8,7 @@ const UserProfile = () => {
     name: 'Solara',
     email: 'Solara@example.com',
     phone: '+84 (987) 12-3456',
-    address: '123 Admin Street, Dashboard City',
+    address: 'Trinh Van Bo Street, Ha Noi City',
     role: 'Administrator',
     avatar: './Logo.png'
   });
@@ -55,7 +55,7 @@ const UserProfile = () => {
                         type="text"
                         value={profile.name}
                         onChange={(e) => setProfile({ ...profile, name: e.target.value })}
-                        className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                       />
                     </div>
 
@@ -67,7 +67,7 @@ const UserProfile = () => {
                         type="text"
                         value={profile.role}
                         readOnly
-                        className="w-full p-3 border rounded-lg bg-gray-50"
+                        className="w-full p-3 border rounded-lg bg-gray-100"
                       />
                     </div>
 
@@ -81,7 +81,7 @@ const UserProfile = () => {
                           type="email"
                           value={profile.email}
                           onChange={(e) => setProfile({ ...profile, email: e.target.value })}
-                          className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                         />
                       </div>
                     </div>
@@ -96,7 +96,7 @@ const UserProfile = () => {
                           type="tel"
                           value={profile.phone}
                           onChange={(e) => setProfile({ ...profile, phone: e.target.value })}
-                          className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                         />
                       </div>
                     </div>
@@ -111,7 +111,7 @@ const UserProfile = () => {
                           type="text"
                           value={profile.address}
                           onChange={(e) => setProfile({ ...profile, address: e.target.value })}
-                          className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                         />
                       </div>
                     </div>
@@ -120,7 +120,7 @@ const UserProfile = () => {
                   <div className="mt-8 flex justify-end">
                     <button
                       type="submit"
-                      className="px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
                       Save Changes
                     </button>
