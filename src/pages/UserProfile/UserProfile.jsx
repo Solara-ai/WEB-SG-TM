@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { FaCamera, FaEnvelope, FaPhone, FaMapMarkerAlt } from 'react-icons/fa';
-import Sidebar from "../Sidebar/Sidebar";
-import Header from "../Header/Header";
+import Sidebar from "../../components/Sidebar/Sidebar";
+import Header from "../../components/Header/Header";
 
 const UserProfile = () => {
   const [profile, setProfile] = useState({

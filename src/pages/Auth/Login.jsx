@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { /*Link,*/ useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import { motion } from "framer-motion";
+import { login } from "../../api/AuthenApi";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -11,13 +12,35 @@ const Login = () => {
     rememberMe: false,
   });
 
-  const handleSubmit = (e) => {
+  const [error, setError] = useState(""); // State để hiển thị lỗi nếu có
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Logic here
-    console.log("Login attempt:", formData);
-    localStorage.setItem("isAuthenticated", "true");
-    navigate("/");
+    setError(""); // Xóa lỗi trước khi gửi request
+  
+    try {
+      const response = await login(formData.email, formData.password);
+  
+      if (response && response.token) {
+        // Lưu trạng thái đăng nhập dựa trên "Remember Me"
+        if (formData.rememberMe) {
+          localStorage.setItem("isAuthenticated", "true");
+          localStorage.setItem("token", response.token);
+        } else {
+          sessionStorage.setItem("isAuthenticated", "true");
+          sessionStorage.setItem("token", response.token);
+        }
+  
+        navigate("/");
+      } else {
+        throw new Error("Invalid login response");
+      }
+    } catch (err) {
+      setError("Login failed. Please check your credentials.");
+      console.error("Login error:", err);
+    }
   };
+  
 
   return (
     <motion.div
@@ -41,9 +64,7 @@ const Login = () => {
         initial={{ y: -50 }}
         animate={{ y: 0 }}
         transition={{ type: "spring", stiffness: 100 }}
-        style={{
-          zIndex: 1,
-        }}
+        style={{ zIndex: 1 }}
       >
         <motion.div
           className="bg-white rounded-lg shadow-xl p-8"
@@ -55,6 +76,9 @@ const Login = () => {
             <h2 className="text-3xl font-bold text-gray-800">Welcome Back</h2>
             <p className="text-gray-600 mt-2">Please sign in to your account</p>
           </div>
+
+          {/* Hiển thị lỗi nếu có */}
+          {error && <p className="text-red-500 text-sm text-center mb-4">{error}</p>}
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <motion.div
@@ -72,9 +96,7 @@ const Login = () => {
                 <input
                   type="email"
                   value={formData.email}
-                  onChange={(e) =>
-                    setFormData({ ...formData, email: e.target.value })
-                  }
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="Enter your email"
                   required
@@ -97,9 +119,7 @@ const Login = () => {
                 <input
                   type="password"
                   value={formData.password}
-                  onChange={(e) =>
-                    setFormData({ ...formData, password: e.target.value })
-                  }
+                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                   className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="Enter your password"
                   required
@@ -118,9 +138,7 @@ const Login = () => {
                   type="checkbox"
                   id="remember-me"
                   checked={formData.rememberMe}
-                  onChange={(e) =>
-                    setFormData({ ...formData, rememberMe: e.target.checked })
-                  }
+                  onChange={(e) => setFormData({ ...formData, rememberMe: e.target.checked })}
                   className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                 />
                 <label
@@ -135,9 +153,7 @@ const Login = () => {
                 <button
                   type="button"
                   className="font-medium text-gray-600 hover:text-green-500"
-                  onClick={() =>
-                    alert("Password reset functionality coming soon!")
-                  }
+                  onClick={() => alert("Password reset functionality coming soon!")}
                 >
                   Forgot your password?
                 </button>
@@ -154,14 +170,14 @@ const Login = () => {
             </motion.button>
           </form>
 
-          {/* <div className="mt-6 text-center">
+          <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
               Don't have an account?{' '}
               <Link to="/register" className="font-medium text-gray-600 hover:text-green-500">
                 Sign up
               </Link>
             </p>
-          </div> */}
+          </div>
         </motion.div>
       </motion.div>
     </motion.div>
