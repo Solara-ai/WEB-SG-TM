@@ -8,16 +8,13 @@ import {
   YAxis,
   Tooltip,
   ResponsiveContainer,
-  // PieChart,
-  // Pie,
-  // Cell,
   LineChart,
-  Line,
+  Line
 } from "recharts";
 import { motion } from "framer-motion";
 import { getUserStats, usersData } from "../../services/userService";
 import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/card";
-import { User, CalendarCheck, LineChart as LineChartIcon } from "lucide-react";
+import { User, CalendarCheck } from "lucide-react";
 
 // const COLORS = ["#8884d8", "#82ca9d"];
 
