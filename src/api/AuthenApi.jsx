@@ -1,68 +1,46 @@
-const BASE_URL = 'https://api.time-flow.io.vn/admin/auth'; // Replace with your actual base URL
+const BASE_URL = 'https://api.time-flow.io.vn/api/v1/solara/admin/auth'; // Replace with your actual base URL
 
-// Function to handle user login
+// Hàm gọi API
+async function callApi(endpoint, method, bodyData) {
+    try {
+        const response = await fetch(`${BASE_URL}${endpoint}`, {
+            method: method,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(bodyData),
+            mode: 'cors'
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.message || 'API request failed');
+        }
+
+        return data;
+    } catch (error) {
+        console.error(`API Error [${method} ${endpoint}]:`, error.message);
+        throw error;
+    }
+}
+
+// Hàm đăng nhập
 async function login(email, password) {
-    const requestBody = {
-        email: email,
-        password: password
-    };
-
-    try {
-        const response = await fetch(`${BASE_URL}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(requestBody),
-        });
-
-        if (!response.ok) {
-            throw new Error('Failed to authenticate user');
-        }
-
-        const data = await response.json();
-        return data; // Return the response data (e.g., AuthenticateResponse)
-
-    } catch (error) {
-        console.error('Login error:', error);
-        throw error;
-    }
+    return callApi('', 'POST', { email, password });
 }
 
-// Function to handle user registration
+// Hàm đăng ký
 async function register(fullName, email, password, phone, gender, hobbies, occupation, birthday) {
-    const requestBody = {
-        fullName: fullName,
-        email: email,
-        password: password,
-        phone: phone,
-        gender: gender, // This should be an enum, e.g., 'MALE', 'FEMALE'
-        hobbies: hobbies,
-        Occupation: occupation,
-        birthday: birthday, // Format: yyyy-mm-dd
-    };
-
-    try {
-        const response = await fetch(`${BASE_URL}/register`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(requestBody),
-        });
-
-        if (!response.ok) {
-            throw new Error('Failed to register user');
-        }
-
-        const data = await response.json();
-        return data; // Return the response data (e.g., BaseResponse)
-
-    } catch (error) {
-        console.error('Registration error:', error);
-        throw error;
-    }
+    return callApi('/create', 'POST', {
+        fullName,
+        email,
+        password,
+        phone,
+        gender: gender.toUpperCase(), // Chuyển đổi enum
+        hobbies,
+        occupation,
+        birthday, // Format: yyyy-mm-dd
+    });
 }
 
-// Export the functions for use in other parts of your application
+// Xuất các hàm để sử dụng bên ngoài
 export { login, register };

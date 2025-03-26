@@ -21,7 +21,7 @@ const Login = () => {
     try {
       const response = await login(formData.email, formData.password);
   
-      if (response && response.token) {
+      if (response && response.data.token) {
         // Lưu trạng thái đăng nhập dựa trên "Remember Me"
         if (formData.rememberMe) {
           localStorage.setItem("isAuthenticated", "true");
