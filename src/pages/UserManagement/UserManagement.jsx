@@ -4,11 +4,10 @@ import {
   FaEye,
   FaTimes,
   FaUser,
+  FaPhoneAlt,
   FaEnvelope,
-  FaCheckCircle,
   FaCalendarAlt,
   FaClipboardList,
-  FaRainbow,
 } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import Sidebar from "../../components/Sidebar/Sidebar";
@@ -80,10 +79,9 @@ const UserManagement = () => {
                 <tr>
                   <th className="p-3">Name</th>
                   <th className="p-3">Email</th>
-                  <th className="p-3">Status</th>
+                  <th className="p-3">Phone</th>
                   <th className="p-3">Registered Date</th>
                   <th className="p-3">Schedules Created</th>
-                  <th className="p-3">Uses AI</th>
                   <th className="p-3">Actions</th>
                 </tr>
               </thead>
@@ -101,10 +99,9 @@ const UserManagement = () => {
                       >
                         <td className="p-3">{user.name}</td>
                         <td className="p-3">{user.email}</td>
-                        <td className={`p-3 font-semibold ${user.status === "Active" ? "text-green-600" : "text-red-600"}`}>{user.status}</td>
+                        <td className="p-3">{user.phoneNumber}</td>
                         <td className="p-3">{user.registeredAt}</td>
                         <td className="p-3 text-center">{user.createdSchedules}</td>
-                        <td className={`p-3 text-center font-semibold ${user.usesAI ? "text-blue-600" : "text-gray-500"}`}>{user.usesAI ? "Yes" : "No"}</td>
                         <td className="p-3 text-center">
                           <motion.button
                             whileHover={{ scale: 1.2, backgroundColor: "#2563eb" }}
@@ -188,12 +185,8 @@ const UserManagement = () => {
                   <strong>Email:</strong> {selectedUser.email}
                 </p>
                 <p className="flex items-center gap-2">
-                  <FaCheckCircle
-                    className={`text-${
-                      selectedUser.status === "Active" ? "green" : "red"
-                    }-500`}
-                  />{" "}
-                  <strong>Status:</strong> {selectedUser.status}
+                  <FaPhoneAlt className="text-gray-500" /> <strong>Phone:</strong>{" "}
+                  {selectedUser.phoneNumber}
                 </p>
                 <p className="flex items-center gap-2">
                   <FaCalendarAlt className="text-gray-500" />{" "}
@@ -203,15 +196,7 @@ const UserManagement = () => {
                   <FaClipboardList className="text-gray-500" />{" "}
                   <strong>Schedules Created:</strong>{" "}
                   {selectedUser.createdSchedules}
-                </p>
-                <p className="flex items-center gap-2">
-                  <FaRainbow
-                    className={`text-${
-                      selectedUser.usesAI ? "blue" : "gray"
-                    }-500`}
-                  />{" "}
-                  <strong>Used AI:</strong> {selectedUser.usesAI ? "Yes" : "No"}
-                </p>
+                </p>                
               </div>
               <div className="mt-6 flex justify-end">
                 <motion.button

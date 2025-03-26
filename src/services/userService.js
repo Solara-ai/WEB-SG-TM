@@ -1,211 +1,210 @@
-// User data service to share data between components
 export const usersData = [
     {
-        id: 1,
-        name: "Nguyen Van A",
-        email: "nguyenvana@gmail.com",
-        status: "Active",
-        registeredAt: "2025-03-20",
-        createdSchedules: 15,
-        usesAI: true,
-      },
-      {
-        id: 2,
-        name: "Tran Thi B",
-        email: "tranthib@gmail.com",
-        status: "Inactive",
-        registeredAt: "2025-03-20",
-        createdSchedules: 8,
-        usesAI: true,
-      },
-      {
-        id: 3,
-        name: "Le Duc C",
-        email: "leducc@gmail.com",
-        status: "Active",
-        registeredAt: "2025-03-20",
-        createdSchedules: 7,
-        usesAI: false,
-      },
-      {
-        id: 4,
-        name: "Ha Thi D",
-        email: "hathid@gmail.com",
-        status: "Active",
-        registeredAt: "2025-03-20",
-        createdSchedules: 9,
-        usesAI: true,
-      },
-      {
-        id: 5,
-        name: "Vu Van E",
-        email: "vuvane@gmail.com",
-        status: "Inactive",
-        registeredAt: "2025-03-20",
-        createdSchedules: 12,
-        usesAI: true,
-      },
-      {
-        id: 6,
-        name: "Pham Van F",
-        email: "phamvanf@gmail.com",
-        status: "Active",
-        registeredAt: "2025-03-21",
-        createdSchedules: 5,
-        usesAI: false,
-      },
-      {
-        id: 7,
-        name: "Hoang Thi G",
-        email: "hoangthig@gmail.com",
-        status: "Inactive",
-        registeredAt: "2025-03-22",
-        createdSchedules: 11,
-        usesAI: true,
-      },
-      {
-        id: 8,
-        name: "Dang Minh H",
-        email: "dangminhh@gmail.com",
-        status: "Active",
-        registeredAt: "2025-03-23",
-        createdSchedules: 14,
-        usesAI: false,
-      },
-      {
-        id: 9,
-        name: "Bui Van I",
-        email: "buivani@gmail.com",
-        status: "Inactive",
-        registeredAt: "2025-03-24",
-        createdSchedules: 6,
-        usesAI: true,
-      },
-      {
-        id: 10,
-        name: "Nguyen Thi J",
-        email: "nguyenthij@gmail.com",
-        status: "Active",
-        registeredAt: "2025-03-25",
-        createdSchedules: 9,
-        usesAI: false,
-      },
-      {
-        id: 11,
-        name: "Tran Van K",
-        email: "tranvank@gmail.com",
-        status: "Inactive",
-        registeredAt: "2025-03-26",
-        createdSchedules: 10,
-        usesAI: true,
-      },
-      {
-        id: 12,
-        name: "Le Thi L",
-        email: "lethil@gmail.com",
-        status: "Active",
-        registeredAt: "2025-03-27",
-        createdSchedules: 7,
-        usesAI: true,
-      },
-      {
-        id: 13,
-        name: "Pham Duc M",
-        email: "phamducm@gmail.com",
-        status: "Inactive",
-        registeredAt: "2025-03-28",
-        createdSchedules: 12,
-        usesAI: false,
-      },
-      {
-        id: 14,
-        name: "Dang Thi N",
-        email: "dangthin@gmail.com",
-        status: "Active",
-        registeredAt: "2025-03-29",
-        createdSchedules: 5,
-        usesAI: true,
-      },
-      {
-        id: 15,
-        name: "Bui Van O",
-        email: "buivano@gmail.com",
-        status: "Inactive",
-        registeredAt: "2025-03-30",
-        createdSchedules: 14,
-        usesAI: false,
-      },
-      {
-        id: 16,
-        name: "Hoang Duc P",
-        email: "hoangducp@gmail.com",
-        status: "Active",
-        registeredAt: "2025-03-31",
-        createdSchedules: 6,
-        usesAI: true,
-      },
-      {
-        id: 17,
-        name: "Nguyen Thi Q",
-        email: "nguyenthiq@gmail.com",
-        status: "Inactive",
-        registeredAt: "2025-04-01",
-        createdSchedules: 8,
-        usesAI: true,
-      },
-      {
-        id: 18,
-        name: "Tran Van R",
-        email: "tranvanr@gmail.com",
-        status: "Active",
-        registeredAt: "2025-04-02",
-        createdSchedules: 10,
-        usesAI: false,
-      },
-      {
-        id: 19,
-        name: "Le Thi S",
-        email: "lethis@gmail.com",
-        status: "Inactive",
-        registeredAt: "2025-04-03",
-        createdSchedules: 7,
-        usesAI: true,
-      },
-      {
-        id: 20,
-        name: "Pham Van T",
-        email: "phamvant@gmail.com",
-        status: "Active",
-        registeredAt: "2025-04-04",
-        createdSchedules: 13,
-        usesAI: false,
-      }
-  ];
-  
-  export const getUserStats = () => {
-    const totalSchedules = usersData.reduce((acc, user) => acc + user.createdSchedules, 0);
-    const aiUsers = usersData.filter(user => user.usesAI).length;
-    const activeUsers = usersData.filter(user => user.status === "Active").length;
-  
-    const schedulesByDate = usersData.reduce((acc, user) => {
-      const date = user.registeredAt;
-      if (!acc[date]) {
-        acc[date] = 0;
-      }
-      acc[date] += user.createdSchedules;
-      return acc;
-    }, {});
-  
+        "id": 6,
+        "name": "Pham Minh F",
+        "email": "phamminhf@gmail.com",
+        "phoneNumber": "0981234567",
+        "registeredAt": "2025-02-10",
+        "createdSchedules": 5
+    },
+    {
+        "id": 7,
+        "name": "Dang Thi G",
+        "email": "dangthig@gmail.com",
+        "phoneNumber": "0923456789",
+        "registeredAt": "2025-01-22",
+        "createdSchedules": 10
+    },
+    {
+        "id": 8,
+        "name": "Bui Van H",
+        "email": "buivanh@gmail.com",
+        "phoneNumber": "0918765432",
+        "registeredAt": "2025-02-28",
+        "createdSchedules": 14
+    },
+    {
+        "id": 9,
+        "name": "Hoang Thi I",
+        "email": "hoangthii@gmail.com",
+        "phoneNumber": "0932109876",
+        "registeredAt": "2025-03-05",
+        "createdSchedules": 6
+    },
+    {
+        "id": 10,
+        "name": "Nguyen Van J",
+        "email": "nguyenvanj@gmail.com",
+        "phoneNumber": "0975432109",
+        "registeredAt": "2025-02-18",
+        "createdSchedules": 13
+    },
+    {
+        "id": 11,
+        "name": "Le Thi K",
+        "email": "lethik@gmail.com",
+        "phoneNumber": "0956784321",
+        "registeredAt": "2025-01-15",
+        "createdSchedules": 9
+    },
+    {
+        "id": 12,
+        "name": "Trinh Van L",
+        "email": "trinhvanl@gmail.com",
+        "phoneNumber": "0902345678",
+        "registeredAt": "2025-03-02",
+        "createdSchedules": 11
+    },
+    {
+        "id": 13,
+        "name": "Dao Thi M",
+        "email": "daothim@gmail.com",
+        "phoneNumber": "0919876543",
+        "registeredAt": "2025-02-07",
+        "createdSchedules": 7
+    },
+    {
+        "id": 14,
+        "name": "Luong Van N",
+        "email": "luongvann@gmail.com",
+        "phoneNumber": "0936543210",
+        "registeredAt": "2025-01-30",
+        "createdSchedules": 15
+    },
+    {
+        "id": 15,
+        "name": "Vu Thi O",
+        "email": "vuthio@gmail.com",
+        "phoneNumber": "0978765432",
+        "registeredAt": "2025-03-10",
+        "createdSchedules": 8
+    },
+    {
+        "id": 16,
+        "name": "Phan Van P",
+        "email": "phanvanp@gmail.com",
+        "phoneNumber": "0987651234",
+        "registeredAt": "2025-02-12",
+        "createdSchedules": 12
+    },
+    {
+        "id": 17,
+        "name": "Ho Thi Q",
+        "email": "hothiq@gmail.com",
+        "phoneNumber": "0912348765",
+        "registeredAt": "2025-03-08",
+        "createdSchedules": 10
+    },
+    {
+        "id": 18,
+        "name": "Dinh Van R",
+        "email": "dinhvanr@gmail.com",
+        "phoneNumber": "0923459876",
+        "registeredAt": "2025-01-28",
+        "createdSchedules": 6
+    },
+    {
+        "id": 19,
+        "name": "Nguyen Thi S",
+        "email": "nguyenthis@gmail.com",
+        "phoneNumber": "0934567890",
+        "registeredAt": "2025-02-15",
+        "createdSchedules": 13
+    },
+    {
+        "id": 20,
+        "name": "Lam Van T",
+        "email": "lamvant@gmail.com",
+        "phoneNumber": "0967890123",
+        "registeredAt": "2025-03-12",
+        "createdSchedules": 9
+    },
+    {
+        "id": 21,
+        "name": "Tran Thi U",
+        "email": "tranthiu@gmail.com",
+        "phoneNumber": "0976540987",
+        "registeredAt": "2025-01-10",
+        "createdSchedules": 11
+    },
+    {
+        "id": 22,
+        "name": "Nguyen Van V",
+        "email": "nguyenvanv@gmail.com",
+        "phoneNumber": "0981203948",
+        "registeredAt": "2025-02-05",
+        "createdSchedules": 7
+    },
+    {
+        "id": 23,
+        "name": "Do Thi W",
+        "email": "dothiw@gmail.com",
+        "phoneNumber": "0912039485",
+        "registeredAt": "2025-03-18",
+        "createdSchedules": 10
+    },
+    {
+        "id": 24,
+        "name": "Pham Van X",
+        "email": "phamvanx@gmail.com",
+        "phoneNumber": "0923450129",
+        "registeredAt": "2025-02-22",
+        "createdSchedules": 14
+    },
+    {
+        "id": 25,
+        "name": "Vu Thi Y",
+        "email": "vuthiy@gmail.com",
+        "phoneNumber": "0938765432",
+        "registeredAt": "2025-01-25",
+        "createdSchedules": 5
+    }
+];
+
+export const getUserStats = () => {
+    const today = new Date();
+    const oneWeekAgo = new Date(today);
+    oneWeekAgo.setDate(today.getDate() - 7);
+    const oneMonthAgo = new Date(today);
+    oneMonthAgo.setMonth(today.getMonth() - 1);
+
+    const totalUsers = usersData.length;
+    const usersWithSchedules = usersData.filter(user => user.createdSchedules > 0).length;
+    const usersWithoutSchedules = totalUsers - usersWithSchedules;
+
+    const schedulesByDate = {};
+    const schedulesByMonth = {};
+    const userGrowthByMonth = {};
+
+    usersData.forEach(user => {
+        const registeredDate = new Date(user.registeredAt);
+        const monthKey = `${registeredDate.getFullYear()}-${String(registeredDate.getMonth() + 1).padStart(2, '0')}`;
+
+        // Tính số lịch trình theo ngày
+        if (!schedulesByDate[user.registeredAt]) {
+            schedulesByDate[user.registeredAt] = 0;
+        }
+        schedulesByDate[user.registeredAt] += user.createdSchedules;
+
+        // Tính số lịch trình theo tháng
+        if (!schedulesByMonth[monthKey]) {
+            schedulesByMonth[monthKey] = 0;
+        }
+        schedulesByMonth[monthKey] += user.createdSchedules;
+
+        // Tính tăng trưởng người dùng theo tháng
+        if (!userGrowthByMonth[monthKey]) {
+            userGrowthByMonth[monthKey] = 0;
+        }
+        userGrowthByMonth[monthKey]++;
+    });
+
     return {
-      totalSchedules,
-      aiUsage: {
-        used: aiUsers,
-        notUsed: usersData.length - aiUsers
-      },
-      accountStatus: {
-        active: activeUsers,
-        inactive: usersData.length - activeUsers
-      },
-      schedulesByDate
+        totalUsers,
+        usersWithSchedules,
+        usersWithoutSchedules,
+        schedulesByDate,
+        schedulesByMonth,
+        userGrowthByMonth: Object.entries(userGrowthByMonth).map(([month, growth]) => ({ month, growth })),
     };
-  };
+};
