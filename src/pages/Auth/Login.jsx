@@ -1,11 +1,13 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { /* Link,*/ useNavigate } from "react-router-dom";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { login } from "../../api/AuthenApi";
+//import { useAuth } from "../../context/AuthContext";
 
 const Login = () => {
   const navigate = useNavigate();
+  //const { login: authenticate } = useAuth();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -20,17 +22,8 @@ const Login = () => {
   
     try {
       const response = await login(formData.email, formData.password);
-  
       if (response && response.token) {
-        // Lưu trạng thái đăng nhập dựa trên "Remember Me"
-        if (formData.rememberMe) {
-          localStorage.setItem("isAuthenticated", "true");
-          localStorage.setItem("token", response.token);
-        } else {
-          sessionStorage.setItem("isAuthenticated", "true");
-          sessionStorage.setItem("token", response.token);
-        }
-  
+        //authenticate(response.token, formData.rememberMe); // Cập nhật trạng thái đăng nhập
         navigate("/");
       } else {
         throw new Error("Invalid login response");
@@ -40,7 +33,7 @@ const Login = () => {
       console.error("Login error:", err);
     }
   };
-  
+
 
   return (
     <motion.div
@@ -170,14 +163,14 @@ const Login = () => {
             </motion.button>
           </form>
 
-          <div className="mt-6 text-center">
+          {/* <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
               Don't have an account?{' '}
               <Link to="/register" className="font-medium text-gray-600 hover:text-green-500">
                 Sign up
               </Link>
             </p>
-          </div>
+          </div> */}
         </motion.div>
       </motion.div>
     </motion.div>

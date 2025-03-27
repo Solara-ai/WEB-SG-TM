@@ -5,8 +5,10 @@ import Register from "../pages/Auth/Register";
 import Calendar from "../pages/Calendar/Calendar";
 import UserProfile from "../pages/UserProfile/UserProfile";
 import UserManagement from "../pages/UserManagement/UserManagement"; // Import UserManagement
+//import ProtectedRoute from "../ProtectedRoute";
+//import { AuthProvider } from "../context/AuthContext";
 
-// Protected Route wrapper component
+// Protected temp
 const ProtectedRoute = ({ children }) => {
   localStorage.setItem("isAuthenticated", "true");
   const isAuthenticated = localStorage.getItem("isAuthenticated") === "true";
@@ -20,22 +22,24 @@ const ProtectedRoute = ({ children }) => {
 
 const AppRouter = () => {
   return (
-    <Router>
-      <Routes>
-        {/* Public Routes */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+    //<AuthProvider>
+      <Router>
+        <Routes>
+          {/* Public Routes */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
 
-        {/* Protected Routes */}
-        <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-        <Route path="/calendar" element={<ProtectedRoute><Calendar /></ProtectedRoute>} />
-        <Route path="/profile" element={<ProtectedRoute><UserProfile /></ProtectedRoute>} />
-        <Route path="/users" element={<ProtectedRoute><UserManagement /></ProtectedRoute>} />
+          {/* Protected Routes */}
+          <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+          <Route path="/calendar" element={<ProtectedRoute><Calendar /></ProtectedRoute>} />
+          <Route path="/profile" element={<ProtectedRoute><UserProfile /></ProtectedRoute>} />
+          <Route path="/users" element={<ProtectedRoute><UserManagement /></ProtectedRoute>} />
 
-        {/* Catch all route - redirect to dashboard */}
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </Router>
+          {/* Catch all route - redirect to dashboard */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </Router>
+    //</AuthProvider>
   );
 };
 

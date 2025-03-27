@@ -1,148 +1,164 @@
-import { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
+import { Card } from "../../components/ui/card";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import Header from "../../components/Header/Header";
 import {
+  PieChart,
+  Pie,
+  Cell,
   BarChart,
   Bar,
   XAxis,
   YAxis,
+  CartesianGrid,
   Tooltip,
-  ResponsiveContainer,
   LineChart,
-  Line
+  Line,
+  Legend,
+  ResponsiveContainer,
 } from "recharts";
-import { motion } from "framer-motion";
-import { getUserStats, usersData } from "../../services/userService";
-import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/card";
-import { User, CalendarCheck } from "lucide-react";
+import { getUserStats } from "../../services/userService";
 
-// const COLORS = ["#8884d8", "#82ca9d"];
+const COLORS = ["#0088FE", "#FF69B4"];
 
 const Dashboard = () => {
-  const [totalUsers, setTotalUsers] = useState(0);
-  const [usersWithSchedules, setUsersWithSchedules] = useState(0);
-  const [usersWithoutSchedules, setUsersWithoutSchedules] = useState(0);
-  const [dailySchedules, setDailySchedules] = useState([]);
-  const [monthlySchedules, setMonthlySchedules] = useState([]);
-  const [userGrowth, setUserGrowth] = useState([]);
+  const [stats, setStats] = useState({
+    totalUsers: 0,
+    usersByGender: {},
+    usersThisWeek: 0,
+    usersThisMonth: 0,
+    userRegistrationsByMonth: [],
+  });
 
   useEffect(() => {
-    const stats = getUserStats();
-    setTotalUsers(usersData.length);
-    setUsersWithSchedules(stats.usersWithSchedules);
-    setUsersWithoutSchedules(usersData.length - stats.usersWithSchedules);
-
-    setDailySchedules(
-      Object.entries(stats.schedulesByDate).map(([date, schedules]) => ({
-        day: new Date(date).toLocaleDateString("en-US", {
-          weekday: "short",
-          month: "short",
-          day: "numeric",
-        }),
-        schedules,
-      })).slice(-7)
-    );
-
-    setMonthlySchedules(
-      Object.entries(stats.schedulesByMonth).map(([month, schedules]) => ({
-        month,
-        schedules,
-      }))
-    );
-
-    setUserGrowth(stats.userGrowthByMonth);
+    setStats(getUserStats());
   }, []);
 
+  const dataPie = Object.entries(stats.usersByGender).map(([key, value]) => ({
+    name: key,
+    value,
+  }));
+
+  const dataBarWeek = [{ name: "This Week", users: stats.usersThisWeek }];
+  const dataBarMonth = [{ name: "This Month", users: stats.usersThisMonth }];
+
+  const dataLineChart = stats.userRegistrationsByMonth.map(
+    ({ month, count }) => ({
+      name: month,
+      users: count,
+    })
+  );
+
   return (
-    <div className="flex h-screen bg-gray-100">
-      <Sidebar className="h-screen w-64 flex-shrink-0" />
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <Header className="sticky top-0 z-50 bg-white shadow-xl" />
-        <div className="flex-1 overflow-auto p-6 space-y-6">
-          <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <h2 className="text-3xl font-bold text-gray-800">Dashboard Overview</h2>
-          </motion.div>
+    <div className="flex h-screen bg-gray-100 overflow-hidden">
+      <Sidebar />
+      <div className="flex-1 flex flex-col relative">
+        <Header />
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Total Users</CardTitle>
-              </CardHeader>
-              <CardContent className="flex items-center space-x-4">
-                <User className="w-10 h-10 text-blue-500" />
-                <span className="text-2xl font-bold">{totalUsers}</span>
-              </CardContent>
+        <div className="p-6 space-y-6 overflow-auto">
+          {/* Row 1 */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Card Users */}
+            <Card className="p-6 shadow-lg rounded-2xl flex flex-col justify-center items-center bg-white hover:shadow-xl transition-all">
+              <h2 className="text-xl font-semibold text-gray-700">
+                Total Users
+              </h2>
+              <p className="text-5xl font-bold text-blue-600">
+                {stats.totalUsers}
+              </p>
             </Card>
 
-            <Card>
-              <CardHeader>
-                <CardTitle>Users with Schedules</CardTitle>
-              </CardHeader>
-              <CardContent className="flex items-center space-x-4">
-                <CalendarCheck className="w-10 h-10 text-green-500" />
-                <span className="text-2xl font-bold">{usersWithSchedules} ({((usersWithSchedules / totalUsers) * 100).toFixed(1)}%)</span>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Users without Schedules</CardTitle>
-              </CardHeader>
-              <CardContent className="flex items-center space-x-4">
-                <CalendarCheck className="w-10 h-10 text-red-500" />
-                <span className="text-2xl font-bold">{usersWithoutSchedules} ({((usersWithoutSchedules / totalUsers) * 100).toFixed(1)}%)</span>
-              </CardContent>
+            {/* Card Biểu đồ Pie */}
+            <Card className="p-6 shadow-lg rounded-2xl bg-white hover:shadow-xl transition-all flex flex-col items-center">
+              <h2 className="text-xl font-semibold text-gray-700 mb-4">
+                User Distribution
+              </h2>
+              <div className="w-3/4">
+                <ResponsiveContainer width="100%" aspect={1.5}>
+                  <PieChart>
+                    <Pie
+                      data={dataPie}
+                      cx="50%"
+                      cy="50%"
+                      outerRadius="70%"
+                      innerRadius="40%"
+                      dataKey="value"
+                      label
+                    >
+                      {dataPie.map((entry, index) => (
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={COLORS[index % COLORS.length]}
+                        />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+              {/* Legend dưới biểu đồ */}
+              <div className="mt-2">
+                <Legend layout="horizontal" align="center" />
+              </div>
             </Card>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Schedules Created (Last 7 Days)</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ResponsiveContainer width="100%" height={250}>
-                  <BarChart data={dailySchedules}>
-                    <XAxis dataKey="day" />
-                    <YAxis />
-                    <Tooltip />
-                    <Bar dataKey="schedules" fill="#82ca9d" />
-                  </BarChart>
-                </ResponsiveContainer>
-              </CardContent>
+          {/* Row 2 */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Card className="p-6 shadow-md rounded-2xl bg-white hover:shadow-xl transition-all">
+              <h2 className="text-lg font-semibold text-gray-700">
+                Users Registered This Week
+              </h2>
+              <ResponsiveContainer width="100%" height={250}>
+                <BarChart data={dataBarWeek}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#ddd" />
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <Tooltip />
+                  <Bar dataKey="users" fill="#4F46E5" barSize={45} />
+                </BarChart>
+              </ResponsiveContainer>
             </Card>
 
-            <Card>
-              <CardHeader>
-                <CardTitle>Schedules Created (Monthly)</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ResponsiveContainer width="100%" height={250}>
-                  <BarChart data={monthlySchedules}>
-                    <XAxis dataKey="month" />
-                    <YAxis />
-                    <Tooltip />
-                    <Bar dataKey="schedules" fill="#ffc658" />
-                  </BarChart>
-                </ResponsiveContainer>
-              </CardContent>
-            </Card>           
+            <Card className="p-6 shadow-md rounded-2xl bg-white hover:shadow-xl transition-all">
+              <h2 className="text-lg font-semibold text-gray-700">
+                Users Registered This Month
+              </h2>
+              <ResponsiveContainer width="100%" height={250}>
+                <BarChart data={dataBarMonth}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#ddd" />
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <Tooltip />
+                  <Bar dataKey="users" fill="#10B981" barSize={45} />
+                </BarChart>
+              </ResponsiveContainer>
+            </Card>
           </div>
-          <div>
-          <Card>
-              <CardHeader>
-                <CardTitle>User Growth (Monthly)</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ResponsiveContainer width="100%" height={250}>
-                  <LineChart data={userGrowth}>
-                    <XAxis dataKey="month" />
+
+          {/* Row 3 */}
+          <div className="w-full">
+            <Card className="p-6 shadow-md rounded-2xl bg-white hover:shadow-xl transition-all">
+              <h2 className="text-lg font-semibold text-gray-700">
+                User Growth by Month
+              </h2>
+              <div className="w-full h-[300px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={dataLineChart}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#ddd" />
+                    <XAxis dataKey="name" />
                     <YAxis />
                     <Tooltip />
-                    <Line type="monotone" dataKey="growth" stroke="#8884d8" strokeWidth={2} />
+                    <Legend />
+                    <Line
+                      type="monotone"
+                      dataKey="users"
+                      stroke="#FF69B4"
+                      strokeWidth={2.5}
+                    />
                   </LineChart>
                 </ResponsiveContainer>
-              </CardContent>
+              </div>
             </Card>
           </div>
         </div>
