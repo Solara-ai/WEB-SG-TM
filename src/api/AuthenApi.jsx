@@ -1,46 +1,42 @@
-const BASE_URL = 'https://api.time-flow.io.vn/api/v1/solara/admin/auth'; // Replace with your actual base URL
+import {callApi} from "./BaseApi.jsx";
+import {BaseResponse} from "./dto/BaseResponse";
+import {AuthenticateResponse} from "./dto/response/AuthenApiResponse";
 
-// Hàm gọi API
-async function callApi(endpoint, method, bodyData) {
-    try {
-        const response = await fetch(`${BASE_URL}${endpoint}`, {
-            method: method,
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(bodyData),
-            mode: 'cors'
-        });
+const END_POINT = '/auth';
 
-        const data = await response.json();
+async function  login(email, password, rememberMe) {
+    const response = await  callApi(`${END_POINT}`, 'POST', { email, password, rememberMe});
+    const baseResponse = BaseResponse.fromJson(response);
 
-        if (!response.ok) {
-            throw new Error(data.message || 'API request failed');
-        }
-
-        return data;
-    } catch (error) {
-        console.error(`API Error [${method} ${endpoint}]:`, error.message);
-        throw error;
+    if (baseResponse.isSuccess() && baseResponse.data) {
+        return new BaseResponse(baseResponse.httpStatus,
+            baseResponse.resultCode,
+            baseResponse.resultMsg,
+            baseResponse.resourceId,
+            AuthenticateResponse.fromJson(baseResponse.data));
+    } else {
+        console.error(baseResponse.resultMsg);
     }
 }
 
-// Hàm đăng nhập
-async function login(email, password) {
-    return callApi('', 'POST', { email, password });
-}
-
-// Hàm đăng ký
 async function register(fullName, email, password, phone, gender, hobbies, occupation, birthday) {
-    return callApi('/create', 'POST', {
+    const response = callApi(`${END_POINT}/create`, 'POST', {
         fullName,
         email,
         password,
         phone,
-        gender: gender.toUpperCase(), // Chuyển đổi enum
+        gender: gender.toUpperCase(),
         hobbies,
         occupation,
         birthday, // Format: yyyy-mm-dd
     });
+    const baseResponse = BaseResponse.fromJson(response);
+
+    if (baseResponse.isSuccess() && baseResponse.data) {
+        return baseResponse.httpStatus;
+    } else {
+        console.error(baseResponse.resultMsg);
+    }
 }
 
-// Xuất các hàm để sử dụng bên ngoài
 export { login, register };
