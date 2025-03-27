@@ -22,11 +22,7 @@ const Login = () => {
     setError(""); // Xóa lỗi trước khi gửi request
   
     try {
-<<<<<<< HEAD
-      const response = await login(formData.email, formData.password);
-      if (response && response.token) {
-        //authenticate(response.token, formData.rememberMe); // Cập nhật trạng thái đăng nhập
-=======
+
       const response = await login(formData.email, formData.password, formData.rememberMe);
   
       if (response && response.data.token) {
@@ -40,7 +36,6 @@ const Login = () => {
           localStorage.setItem("token", response.data.token);
         }
   
->>>>>>> bdd4814a186a5c25093e6c288f1306c9c497e4b6
         navigate("/");
       } else {
         throw new Error("Invalid login response");
