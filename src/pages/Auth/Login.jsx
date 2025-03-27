@@ -14,6 +14,7 @@ const Login = () => {
     rememberMe: false,
   });
 
+
   const [error, setError] = useState(""); // State để hiển thị lỗi nếu có
 
   const handleSubmit = async (e) => {
@@ -21,9 +22,25 @@ const Login = () => {
     setError(""); // Xóa lỗi trước khi gửi request
   
     try {
+<<<<<<< HEAD
       const response = await login(formData.email, formData.password);
       if (response && response.token) {
         //authenticate(response.token, formData.rememberMe); // Cập nhật trạng thái đăng nhập
+=======
+      const response = await login(formData.email, formData.password, formData.rememberMe);
+  
+      if (response && response.data.token) {
+        // Lưu trạng thái đăng nhập dựa trên "Remember Me"
+        if (formData.rememberMe) {
+          localStorage.setItem("isAuthenticated", "true");
+          localStorage.setItem("token", response.data.token);
+          localStorage.setItem("refreshToken", response.data.refreshToken);
+        } else {
+          localStorage.setItem("isAuthenticated", "true");
+          localStorage.setItem("token", response.data.token);
+        }
+  
+>>>>>>> bdd4814a186a5c25093e6c288f1306c9c497e4b6
         navigate("/");
       } else {
         throw new Error("Invalid login response");
