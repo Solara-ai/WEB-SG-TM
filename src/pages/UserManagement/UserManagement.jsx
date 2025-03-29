@@ -19,7 +19,7 @@ const UserManagement = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [selectedUser, setSelectedUser] = useState(null);
-  
+
   // Filter users immediately after search input changes
   const filteredUsers = usersData.filter(
     (user) =>
@@ -27,7 +27,7 @@ const UserManagement = () => {
       user.email.toLowerCase().includes(search.toLowerCase())
   );
 
-  // Reset current page to 1 when search text changes
+  // Reset current page to 1 when searchF text changes
   useEffect(() => {
     setCurrentPage(1);
   }, [search]);
@@ -43,8 +43,6 @@ const UserManagement = () => {
       <div className="flex-1 flex flex-col relative">
         <Header />
         <div className="container mx-auto p-6">
-          <h2 className="text-3xl font-bold text-gray-800 mb-6">User Management</h2>
-
           {/* Search & Pagination Container */}
           <motion.div className="mb-4 flex items-center justify-end space-x-4">
             <select
@@ -101,10 +99,15 @@ const UserManagement = () => {
                         <td className="p-3">{user.email}</td>
                         <td className="p-3">{user.phoneNumber}</td>
                         <td className="p-3">{user.registeredAt}</td>
-                        <td className="p-3 text-center">{user.createdSchedules}</td>
+                        <td className="p-3 text-center">
+                          {user.createdSchedules}
+                        </td>
                         <td className="p-3 text-center">
                           <motion.button
-                            whileHover={{ scale: 1.2, backgroundColor: "#2563eb" }}
+                            whileHover={{
+                              scale: 1.2,
+                              backgroundColor: "#2563eb",
+                            }}
                             whileTap={{ scale: 0.9 }}
                             className="bg-blue-500 text-white px-3 py-1 rounded-lg"
                             onClick={() => setSelectedUser(user)}
@@ -115,8 +118,14 @@ const UserManagement = () => {
                       </motion.tr>
                     ))
                   ) : (
-                    <motion.tr initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                      <td colSpan="7" className="text-center p-4 text-gray-500">No users found.</td>
+                    <motion.tr
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                    >
+                      <td colSpan="7" className="text-center p-4 text-gray-500">
+                        No users found.
+                      </td>
                     </motion.tr>
                   )}
                 </AnimatePresence>
@@ -126,42 +135,57 @@ const UserManagement = () => {
         </div>
 
         {/* Pagination Controls */}
-<div className="flex justify-center items-center mt-4 space-x-2">
-  <button
-    onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-    disabled={currentPage === 1}
-    className={`px-3 py-2 rounded-lg shadow ${
-      currentPage === 1 ? "bg-gray-300 cursor-not-allowed" : "bg-blue-500 text-white"
-    }`}
-  >
-    Prev
-  </button>
+        <div className="flex justify-center items-center mt-4 space-x-2">
+          <button
+            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+            disabled={currentPage === 1}
+            className={`px-3 py-2 rounded-lg shadow ${
+              currentPage === 1
+                ? "bg-gray-300 cursor-not-allowed"
+                : "bg-blue-500 text-white"
+            }`}
+          >
+            Prev
+          </button>
 
-  {Array.from({ length: Math.ceil(filteredUsers.length / itemsPerPage) }, (_, index) => (
-    <button
-      key={index + 1}
-      onClick={() => setCurrentPage(index + 1)}
-      className={`px-3 py-2 rounded-lg shadow ${
-        currentPage === index + 1 ? "bg-blue-600 text-white" : "bg-white"
-      }`}
-    >
-      {index + 1}
-    </button>
-  ))}
+          {Array.from(
+            { length: Math.ceil(filteredUsers.length / itemsPerPage) },
+            (_, index) => (
+              <button
+                key={index + 1}
+                onClick={() => setCurrentPage(index + 1)}
+                className={`px-3 py-2 rounded-lg shadow ${
+                  currentPage === index + 1
+                    ? "bg-blue-600 text-white"
+                    : "bg-white"
+                }`}
+              >
+                {index + 1}
+              </button>
+            )
+          )}
 
-  <button
-    onClick={() => setCurrentPage((prev) => Math.min(prev + 1, Math.ceil(filteredUsers.length / itemsPerPage)))}
-    disabled={currentPage === Math.ceil(filteredUsers.length / itemsPerPage)}
-    className={`px-3 py-2 rounded-lg shadow ${
-      currentPage === Math.ceil(filteredUsers.length / itemsPerPage)
-        ? "bg-gray-300 cursor-not-allowed"
-        : "bg-blue-500 text-white"
-    }`}
-  >
-    Next
-  </button>
-</div>
-
+          <button
+            onClick={() =>
+              setCurrentPage((prev) =>
+                Math.min(
+                  prev + 1,
+                  Math.ceil(filteredUsers.length / itemsPerPage)
+                )
+              )
+            }
+            disabled={
+              currentPage === Math.ceil(filteredUsers.length / itemsPerPage)
+            }
+            className={`px-3 py-2 rounded-lg shadow ${
+              currentPage === Math.ceil(filteredUsers.length / itemsPerPage)
+                ? "bg-gray-300 cursor-not-allowed"
+                : "bg-blue-500 text-white"
+            }`}
+          >
+            Next
+          </button>
+        </div>
 
         {/* Modal for Viewing User Details */}
         {selectedUser && (
@@ -185,8 +209,8 @@ const UserManagement = () => {
                   <strong>Email:</strong> {selectedUser.email}
                 </p>
                 <p className="flex items-center gap-2">
-                  <FaPhoneAlt className="text-gray-500" /> <strong>Phone:</strong>{" "}
-                  {selectedUser.phoneNumber}
+                  <FaPhoneAlt className="text-gray-500" />{" "}
+                  <strong>Phone:</strong> {selectedUser.phoneNumber}
                 </p>
                 <p className="flex items-center gap-2">
                   <FaCalendarAlt className="text-gray-500" />{" "}
@@ -196,7 +220,7 @@ const UserManagement = () => {
                   <FaClipboardList className="text-gray-500" />{" "}
                   <strong>Schedules Created:</strong>{" "}
                   {selectedUser.createdSchedules}
-                </p>                
+                </p>
               </div>
               <div className="mt-6 flex justify-end">
                 <motion.button
@@ -211,7 +235,6 @@ const UserManagement = () => {
             </motion.div>
           </div>
         )}
-
       </div>
     </div>
   );

@@ -9,11 +9,16 @@ import {
   Tooltip,
   ResponsiveContainer,
   LineChart,
-  Line
+  Line,
 } from "recharts";
 import { motion } from "framer-motion";
 import { getUserStats, usersData } from "../../services/userService";
-import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "../../components/ui/card";
 import { User, CalendarCheck } from "lucide-react";
 
 // const COLORS = ["#8884d8", "#82ca9d"];
@@ -33,14 +38,16 @@ const Dashboard = () => {
     setUsersWithoutSchedules(usersData.length - stats.usersWithSchedules);
 
     setDailySchedules(
-      Object.entries(stats.schedulesByDate).map(([date, schedules]) => ({
-        day: new Date(date).toLocaleDateString("en-US", {
-          weekday: "short",
-          month: "short",
-          day: "numeric",
-        }),
-        schedules,
-      })).slice(-7)
+      Object.entries(stats.schedulesByDate)
+        .map(([date, schedules]) => ({
+          day: new Date(date).toLocaleDateString("en-US", {
+            weekday: "short",
+            month: "short",
+            day: "numeric",
+          }),
+          schedules,
+        }))
+        .slice(-7)
     );
 
     setMonthlySchedules(
@@ -59,8 +66,14 @@ const Dashboard = () => {
       <div className="flex-1 flex flex-col overflow-hidden">
         <Header className="sticky top-0 z-50 bg-white shadow-xl" />
         <div className="flex-1 overflow-auto p-6 space-y-6">
-          <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <h2 className="text-3xl font-bold text-gray-800">Dashboard Overview</h2>
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <h2 className="text-3xl font-bold text-gray-800">
+              Dashboard Overview
+            </h2>
           </motion.div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -80,7 +93,10 @@ const Dashboard = () => {
               </CardHeader>
               <CardContent className="flex items-center space-x-4">
                 <CalendarCheck className="w-10 h-10 text-green-500" />
-                <span className="text-2xl font-bold">{usersWithSchedules} ({((usersWithSchedules / totalUsers) * 100).toFixed(1)}%)</span>
+                <span className="text-2xl font-bold">
+                  {usersWithSchedules} (
+                  {((usersWithSchedules / totalUsers) * 100).toFixed(1)}%)
+                </span>
               </CardContent>
             </Card>
 
@@ -90,7 +106,10 @@ const Dashboard = () => {
               </CardHeader>
               <CardContent className="flex items-center space-x-4">
                 <CalendarCheck className="w-10 h-10 text-red-500" />
-                <span className="text-2xl font-bold">{usersWithoutSchedules} ({((usersWithoutSchedules / totalUsers) * 100).toFixed(1)}%)</span>
+                <span className="text-2xl font-bold">
+                  {usersWithoutSchedules} (
+                  {((usersWithoutSchedules / totalUsers) * 100).toFixed(1)}%)
+                </span>
               </CardContent>
             </Card>
           </div>
@@ -126,10 +145,10 @@ const Dashboard = () => {
                   </BarChart>
                 </ResponsiveContainer>
               </CardContent>
-            </Card>           
+            </Card>
           </div>
           <div>
-          <Card>
+            <Card>
               <CardHeader>
                 <CardTitle>User Growth (Monthly)</CardTitle>
               </CardHeader>
@@ -139,7 +158,12 @@ const Dashboard = () => {
                     <XAxis dataKey="month" />
                     <YAxis />
                     <Tooltip />
-                    <Line type="monotone" dataKey="growth" stroke="#8884d8" strokeWidth={2} />
+                    <Line
+                      type="monotone"
+                      dataKey="growth"
+                      stroke="#8884d8"
+                      strokeWidth={2}
+                    />
                   </LineChart>
                 </ResponsiveContainer>
               </CardContent>

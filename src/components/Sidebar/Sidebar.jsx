@@ -1,4 +1,12 @@
-import { FaHome, FaCalendarAlt, FaUser, FaSignOutAlt, FaUsers, FaBars } from "react-icons/fa";
+import {
+  FaHome,
+  FaCalendarAlt,
+  FaUser,
+  FaSignOutAlt,
+  FaUsers,
+  FaBars,
+  FaReadme,
+} from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
@@ -17,9 +25,9 @@ const Sidebar = () => {
       className={`h-screen bg-gray-800 text-white flex flex-col p-5 transition-all duration-300 ${
         isCollapsed ? "w-20" : "w-64"
       }`}
-      initial={{ x: -100, opacity: 0 }}
+      initial={{ x: -10, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
-      transition={{ duration: 0.3 }}
+      transition={{ duration: 0.1 }}
     >
       {/* Toggle Button */}
       <motion.button
@@ -55,12 +63,17 @@ const Sidebar = () => {
             { path: "/", label: "Home", icon: <FaHome /> },
             { path: "/calendar", label: "Calendar", icon: <FaCalendarAlt /> },
             { path: "/users", label: "User Management", icon: <FaUsers /> },
+            { path: "/feedback", label: "Feedback", icon: <FaReadme /> },
             { path: "/profile", label: "Profile", icon: <FaUser /> },
           ].map(({ path, label, icon }) => (
             <motion.li
               key={path}
               className="mb-4"
-              whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.1)", borderRadius: "8px" }}
+              whileHover={{
+                scale: 1.05,
+                backgroundColor: "rgba(255,255,255,0.1)",
+                borderRadius: "8px",
+              }}
               transition={{ duration: 0.2 }}
             >
               <Link to={path} className="flex items-center space-x-2 p-2">
