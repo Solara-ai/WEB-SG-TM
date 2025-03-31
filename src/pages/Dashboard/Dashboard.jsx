@@ -17,7 +17,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import { getUserStats } from "../../services/userService";
+import { getAllUsers } from "../../api/UserApi";
 
 const COLORS = ["#0088FE", "#FF69B4"];
 
@@ -25,41 +25,94 @@ const Dashboard = () => {
   const [stats, setStats] = useState({
     totalUsers: 0,
     usersByGender: {},
-    usersThisWeek: 0,
-    usersThisMonth: 0,
+    usersThisWeek: [],
+    usersThisMonth: [],
     userRegistrationsByMonth: [],
   });
 
   useEffect(() => {
-    setStats(getUserStats());
+    async function fetchData() {
+      const response = await getAllUsers();
+      if (response.isSuccess() && response.data) {
+        const users = response.data;
+        const totalUsers = users.length;
+
+        // Phân loại theo giới tính
+        const usersByGender = users.reduce((acc, user) => {
+          acc[user.gender] = (acc[user.gender] || 0) + 1;
+          return acc;
+        }, {});
+
+        const now = new Date();
+
+        // Dữ liệu cho tuần này
+        const weekDays = Array.from({ length: 7 }, (_, i) => {
+          const day = new Date();
+          day.setDate(now.getDate() - i);
+          return { date: day.toISOString().split("T")[0], count: 0 };
+        }).reverse();
+
+        users.forEach((user) => {
+          const userDate = new Date(user.createdAt).toISOString().split("T")[0];
+          const day = weekDays.find((d) => d.date === userDate);
+          if (day) day.count++;
+        });
+
+        // Dữ liệu cho tháng này
+        const daysInMonth = new Date(
+          now.getFullYear(),
+          now.getMonth() + 1,
+          0
+        ).getDate();
+        const monthDays = Array.from({ length: daysInMonth }, (_, i) => ({
+          day: i + 1,
+          count: 0,
+        }));
+
+        users.forEach((user) => {
+          const userDate = new Date(user.createdAt);
+          if (userDate.getMonth() === now.getMonth()) {
+            monthDays[userDate.getDate() - 1].count++;
+          }
+        });
+
+        // Nhóm dữ liệu theo tháng
+        const userRegistrationsByMonth = users.reduce((acc, user) => {
+          const month = new Date(user.createdAt).toLocaleString("default", {
+            month: "short",
+          });
+          acc[month] = (acc[month] || 0) + 1;
+          return acc;
+        }, {});
+
+        setStats({
+          totalUsers,
+          usersByGender,
+          usersThisWeek: weekDays,
+          usersThisMonth: monthDays,
+          userRegistrationsByMonth: Object.entries(
+            userRegistrationsByMonth
+          ).map(([month, count]) => ({ name: month, users: count })),
+        });
+      }
+    }
+
+    fetchData();
   }, []);
 
   const dataPie = Object.entries(stats.usersByGender).map(([key, value]) => ({
     name: key,
     value,
   }));
-
-  const dataBarWeek = [{ name: "This Week", users: stats.usersThisWeek }];
-  const dataBarMonth = [{ name: "This Month", users: stats.usersThisMonth }];
-
-  const dataLineChart = stats.userRegistrationsByMonth.map(
-    ({ month, count }) => ({
-      name: month,
-      users: count,
-    })
-  );
-
   return (
     <div className="flex h-screen bg-gray-100 overflow-hidden">
       <Sidebar />
       <div className="flex-1 flex flex-col relative">
         <Header />
-
         <div className="p-6 space-y-6 overflow-auto">
           {/* Row 1 */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Card Users */}
-            <Card className="p-6 shadow-lg rounded-2xl flex flex-col justify-center items-center bg-white hover:shadow-xl transition-all">
+            <Card className="p-6 shadow-lg rounded-2xl flex flex-col justify-center items-center bg-white">
               <h2 className="text-xl font-semibold text-gray-700">
                 Total Users
               </h2>
@@ -67,70 +120,62 @@ const Dashboard = () => {
                 {stats.totalUsers}
               </p>
             </Card>
-
-            {/* Card Biểu đồ Pie */}
-            <Card className="p-6 shadow-lg rounded-2xl bg-white hover:shadow-xl transition-all flex flex-col items-center">
+            <Card className="p-6 shadow-lg rounded-2xl bg-white flex flex-col items-center">
               <h2 className="text-xl font-semibold text-gray-700 mb-4">
                 User Distribution
               </h2>
-              <div className="w-3/4">
-                <ResponsiveContainer width="100%" aspect={1.5}>
-                  <PieChart>
-                    <Pie
-                      data={dataPie}
-                      cx="50%"
-                      cy="50%"
-                      outerRadius="70%"
-                      innerRadius="40%"
-                      dataKey="value"
-                      label
-                    >
-                      {dataPie.map((entry, index) => (
-                        <Cell
-                          key={`cell-${index}`}
-                          fill={COLORS[index % COLORS.length]}
-                        />
-                      ))}
-                    </Pie>
-                    <Tooltip />
-                  </PieChart>
-                </ResponsiveContainer>
-              </div>
-              {/* Legend dưới biểu đồ */}
-              <div className="mt-2">
-                <Legend layout="horizontal" align="center" />
-              </div>
+              <ResponsiveContainer width="100%" aspect={3}>
+                <PieChart>
+                  <Pie
+                    data={dataPie}
+                    cx="50%"
+                    cy="50%"
+                    outerRadius="70%"
+                    innerRadius="40%"
+                    dataKey="value"
+                    label
+                  >
+                    {dataPie.map((entry, index) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={COLORS[index % COLORS.length]}
+                      />
+                    ))}
+                  </Pie>
+                  <Tooltip />
+                  <Legend layout="horizontal" align="center" />
+                </PieChart>
+              </ResponsiveContainer>
             </Card>
           </div>
 
           {/* Row 2 */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card className="p-6 shadow-md rounded-2xl bg-white hover:shadow-xl transition-all">
+            <Card className="p-6 shadow-md rounded-2xl bg-white">
               <h2 className="text-lg font-semibold text-gray-700">
                 Users Registered This Week
               </h2>
               <ResponsiveContainer width="100%" height={250}>
-                <BarChart data={dataBarWeek}>
+                <BarChart data={stats.usersThisWeek}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#ddd" />
-                  <XAxis dataKey="name" />
+                  <XAxis dataKey="date" />
                   <YAxis />
                   <Tooltip />
-                  <Bar dataKey="users" fill="#4F46E5" barSize={45} />
+                  <Bar dataKey="count" fill="#4F46E5" barSize={30} />
                 </BarChart>
               </ResponsiveContainer>
             </Card>
-
-            <Card className="p-6 shadow-md rounded-2xl bg-white hover:shadow-xl transition-all">
+            <Card className="p-6 shadow-md rounded-2xl bg-white">
               <h2 className="text-lg font-semibold text-gray-700">
                 Users Registered This Month
               </h2>
               <ResponsiveContainer width="100%" height={250}>
-                <BarChart data={dataBarMonth}>
+                <BarChart data={stats.usersThisMonth}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#ddd" />
-                  <XAxis dataKey="name" />
+                  <XAxis dataKey="day" />
                   <YAxis />
                   <Tooltip />
-                  <Bar dataKey="users" fill="#10B981" barSize={45} />
+                  <Bar dataKey="count" fill="#10B981" barSize={10} />
                 </BarChart>
               </ResponsiveContainer>
             </Card>
@@ -144,7 +189,7 @@ const Dashboard = () => {
               </h2>
               <div className="w-full h-[300px]">
                 <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={dataLineChart}>
+                  <LineChart data={stats.userRegistrationsByMonth}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#ddd" />
                     <XAxis dataKey="name" />
                     <YAxis />

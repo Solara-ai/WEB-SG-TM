@@ -1,9 +1,27 @@
-//import { FaUserCircle } from "react-icons/fa";
 import { useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
+// import { useState, useEffect } from "react";
+// import { Sun, Moon } from "lucide-react";
 
 const Header = () => {
   const location = useLocation();
+  // const [darkMode, setDarkMode] = useState(() => {
+  //   return localStorage.getItem("theme") === "dark";
+  // });
+
+  // useEffect(() => {
+  //   if (darkMode) {
+  //     document.documentElement.classList.add("dark");
+  //     localStorage.setItem("theme", "dark");
+  //   } else {
+  //     document.documentElement.classList.remove("dark");
+  //     localStorage.setItem("theme", "light");
+  //   }
+  // }, [darkMode]);
+
+  // const toggleTheme = () => {
+  //   setDarkMode((prev) => !prev);
+  // };
 
   const getTitle = () => {
     switch (location.pathname) {
@@ -15,19 +33,21 @@ const Header = () => {
         return "Profile";
       case "/users":
         return "User Management";
+      case "/feedback":
+        return "Feedback";
       default:
         return "Dashboard";
     }
   };
 
   return (
-    <motion.div 
+    <motion.div
       className="bg-gradient-to-r from-gray-700 to-white shadow-lg p-5 flex justify-between items-center text-white"
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <motion.h1 
+      <motion.h1
         className="text-2xl font-bold tracking-wide"
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
@@ -35,21 +55,12 @@ const Header = () => {
       >
         {getTitle()}
       </motion.h1>
-      {/* <motion.div 
-        className="flex items-center space-x-4 bg-white p-2 rounded-lg shadow-md text-gray-800"
-        initial={{ opacity: 0, x: 20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.5 }}
+      {/* <button 
+        onClick={toggleTheme} 
+        className="p-2 rounded-full bg-gray-800 hover:bg-gray-600 text-white transition-all"
       >
-        <motion.div 
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-          className="flex items-center space-x-2"
-        >
-          <FaUserCircle className="text-blue-600 text-3xl" />
-          <span className="text-lg font-semibold">Admin</span>
-        </motion.div>
-      </motion.div> */}
+        {darkMode ? <Sun size={24} /> : <Moon size={24} />}
+      </button> */}
     </motion.div>
   );
 };
