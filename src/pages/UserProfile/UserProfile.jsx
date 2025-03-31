@@ -1,22 +1,22 @@
-import { useState } from 'react';
-import { FaCamera, FaEnvelope, FaPhone, FaMapMarkerAlt } from 'react-icons/fa';
+import { useState } from "react";
+import { FaCamera, FaEnvelope, FaPhone, FaMapMarkerAlt } from "react-icons/fa";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import Header from "../../components/Header/Header";
 
 const UserProfile = () => {
   const [profile, setProfile] = useState({
-    name: 'Solara',
-    email: 'Solara@example.com',
-    phone: '+84 (987) 12-3456',
-    address: 'Trinh Van Bo Street, Ha Noi City',
-    role: 'Administrator',
-    avatar: './Logo.png'
+    name: "Solara",
+    email: "Solara@example.com",
+    phone: "+84 (987) 12-3456",
+    address: "Trinh Van Bo Street, Ha Noi City",
+    role: "Administrator",
+    avatar: "./Logo.png",
   });
 
   const handleUpdateProfile = (e) => {
     e.preventDefault();
     // Handle profile update logic here
-    alert('Profile updated successfully!');
+    alert("Profile updated successfully!");
   };
 
   return (
@@ -54,7 +54,9 @@ const UserProfile = () => {
                       <input
                         type="text"
                         value={profile.name}
-                        onChange={(e) => setProfile({ ...profile, name: e.target.value })}
+                        onChange={(e) =>
+                          setProfile({ ...profile, name: e.target.value })
+                        }
                         className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                       />
                     </div>
@@ -80,7 +82,9 @@ const UserProfile = () => {
                         <input
                           type="email"
                           value={profile.email}
-                          onChange={(e) => setProfile({ ...profile, email: e.target.value })}
+                          onChange={(e) =>
+                            setProfile({ ...profile, email: e.target.value })
+                          }
                           className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                         />
                       </div>
@@ -95,7 +99,9 @@ const UserProfile = () => {
                         <input
                           type="tel"
                           value={profile.phone}
-                          onChange={(e) => setProfile({ ...profile, phone: e.target.value })}
+                          onChange={(e) =>
+                            setProfile({ ...profile, phone: e.target.value })
+                          }
                           className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                         />
                       </div>
@@ -110,7 +116,9 @@ const UserProfile = () => {
                         <input
                           type="text"
                           value={profile.address}
-                          onChange={(e) => setProfile({ ...profile, address: e.target.value })}
+                          onChange={(e) =>
+                            setProfile({ ...profile, address: e.target.value })
+                          }
                           className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                         />
                       </div>

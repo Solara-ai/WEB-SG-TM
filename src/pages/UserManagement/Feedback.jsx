@@ -84,11 +84,12 @@ const Feedback = () => {
                   </motion.li>
                 ))
               ) : (
-                <p className="text-gray-500 text-center">No feedback available</p>
+                <p className="text-gray-500 text-center">
+                  No feedback available
+                </p>
               )}
             </ul>
           </motion.div>
-
           <motion.div
             className="col-span-2"
             initial={{ opacity: 0, scale: 0.95 }}
@@ -106,14 +107,19 @@ const Feedback = () => {
                     {selectedFeedback.title}
                   </CardHeader>
                   <CardContent>
-                    <p className="mb-4 text-gray-700">{selectedFeedback.message}</p>
+                    <p className="mb-4 text-gray-700">
+                      {selectedFeedback.message}
+                    </p>
                     <Input
                       value={replyMessage}
                       onChange={(e) => setReplyMessage(e.target.value)}
                       placeholder="Type your reply here..."
                       className="mb-4 border-gray-300 focus:ring-blue-500 focus:border-blue-500"
                     />
-                    <motion.div whileTap={{ scale: 0.95 }} className="inline-block">
+                    <motion.div
+                      whileTap={{ scale: 0.95 }}
+                      className="inline-block"
+                    >
                       <Button
                         onClick={handleSendReply}
                         className="bg-blue-600 text-white hover:bg-blue-700 transition-all"

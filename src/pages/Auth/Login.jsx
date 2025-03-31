@@ -14,17 +14,18 @@ const Login = () => {
     rememberMe: false,
   });
 
-
   const [error, setError] = useState(""); // State để hiển thị lỗi nếu có
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(""); // Xóa lỗi trước khi gửi request
-  
-    try {
 
-      const response = await login(formData.email, formData.password, formData.rememberMe);
-  
+    try {
+      const response = await login(
+        formData.email,
+        formData.password,
+        formData.rememberMe
+      );
       if (response && response.data.token) {
         // Lưu trạng thái đăng nhập dựa trên "Remember Me"
         if (formData.rememberMe) {
@@ -35,7 +36,7 @@ const Login = () => {
           localStorage.setItem("isAuthenticated", "true");
           localStorage.setItem("token", response.data.token);
         }
-  
+
         navigate("/");
       } else {
         throw new Error("Invalid login response");
@@ -45,7 +46,6 @@ const Login = () => {
       console.error("Login error:", err);
     }
   };
-
 
   return (
     <motion.div
@@ -83,7 +83,9 @@ const Login = () => {
           </div>
 
           {/* Hiển thị lỗi nếu có */}
-          {error && <p className="text-red-500 text-sm text-center mb-4">{error}</p>}
+          {error && (
+            <p className="text-red-500 text-sm text-center mb-4">{error}</p>
+          )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <motion.div
@@ -101,7 +103,9 @@ const Login = () => {
                 <input
                   type="email"
                   value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, email: e.target.value })
+                  }
                   className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="Enter your email"
                   required
@@ -124,7 +128,9 @@ const Login = () => {
                 <input
                   type="password"
                   value={formData.password}
-                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, password: e.target.value })
+                  }
                   className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="Enter your password"
                   required
@@ -143,7 +149,9 @@ const Login = () => {
                   type="checkbox"
                   id="remember-me"
                   checked={formData.rememberMe}
-                  onChange={(e) => setFormData({ ...formData, rememberMe: e.target.checked })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, rememberMe: e.target.checked })
+                  }
                   className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                 />
                 <label
@@ -158,7 +166,9 @@ const Login = () => {
                 <button
                   type="button"
                   className="font-medium text-gray-600 hover:text-green-500"
-                  onClick={() => alert("Password reset functionality coming soon!")}
+                  onClick={() =>
+                    alert("Password reset functionality coming soon!")
+                  }
                 >
                   Forgot your password?
                 </button>
@@ -177,8 +187,11 @@ const Login = () => {
 
           {/* <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
-              Don't have an account?{' '}
-              <Link to="/register" className="font-medium text-gray-600 hover:text-green-500">
+              Don't have an account?{" "}
+              <Link
+                to="/register"
+                className="font-medium text-gray-600 hover:text-green-500"
+              >
                 Sign up
               </Link>
             </p>

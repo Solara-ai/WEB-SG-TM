@@ -45,6 +45,7 @@ const UserManagement = () => {
       <div className="flex-1 flex flex-col relative">
         <Header />
         <div className="container mx-auto p-6">
+          {/* Search & Pagination Container */}
           <motion.div className="mb-4 flex items-center justify-end space-x-4">
             <select
               className="bg-white shadow p-3 rounded-lg"
