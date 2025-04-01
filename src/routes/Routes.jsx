@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import Dashboard from "../pages/Dashboard/Dashboard";
 import Login from "../pages/Auth/Login";
@@ -24,6 +24,7 @@ const ProtectedRoute = ({ children }) => {
 // ✅ Kiểm tra token khi app khởi chạy
 const AuthChecker = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const token = getToken();
@@ -31,7 +32,14 @@ const AuthChecker = () => {
       console.warn("No token found! Redirecting to login...");
       navigate("/login");
     }
+    else {
+      setLoading(false); 
+    }
   }, [navigate]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return null;
 };
