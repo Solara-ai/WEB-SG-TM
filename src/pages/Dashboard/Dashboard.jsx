@@ -25,7 +25,6 @@ const Dashboard = () => {
   const [newUsersLast3Months, setNewUsersLast3Months] = useState([]);
 
   // định nghĩa dữ liệu tĩnhh
-  const [userGrowth, setUserGrowth] = useState([]);
 
 
   useEffect(() => {
@@ -69,7 +68,7 @@ const Dashboard = () => {
           </motion.div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-
+            
             <Card>
               <CardHeader>
                 <CardTitle>Total Users</CardTitle>
@@ -87,7 +86,7 @@ const Dashboard = () => {
                 <CardTitle>Users without Schedules</CardTitle>
               </CardHeader>
               <CardContent className="flex items-center space-x-4">
-                <CalendarCheck className="w-10 h-10 text-green-500" />
+              <CalendarCheck className="w-10 h-10 text-green-500" />
                 <span className="text-2xl font-bold">
                   {Userschedule} (
                   {((Userschedule / totalUsers) * 100).toFixed(1)}%)
@@ -97,13 +96,13 @@ const Dashboard = () => {
 
             <Card>
               <CardHeader>
-                <CardTitle>Users without Schedules</CardTitle>
+                <CardTitle>Users with Conversation-percentage</CardTitle>
               </CardHeader>
               <CardContent className="flex items-center space-x-4">
                 <CalendarCheck className="w-10 h-10 text-red-500" />
                 <span className="text-2xl font-bold">
-                  {usersWithoutSchedules} (
-                  {((usersWithoutSchedules / totalUsers) * 100).toFixed(1)}%)
+                  {userconversation} (
+                  {((userconversation / totalUsers) * 100).toFixed(1)}%)
                 </span>
               </CardContent>
             </Card>
@@ -112,15 +111,15 @@ const Dashboard = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
             <Card>
               <CardHeader>
-                <CardTitle>Schedules Created (Last 7 Days)</CardTitle>
+                <CardTitle>Chats Created (Last 7 Days)</CardTitle>
               </CardHeader>
               <CardContent>
                 <ResponsiveContainer width="100%" height={250}>
-                  <BarChart data={dailySchedules}>
-                    <XAxis dataKey="day" />
+                  <BarChart data={chatCountLast7Days}>
+                    <XAxis dataKey="date" />
                     <YAxis />
                     <Tooltip />
-                    <Bar dataKey="schedules" fill="#82ca9d" />
+                    <Bar dataKey="count" fill="#82ca9d" />
                   </BarChart>
                 </ResponsiveContainer>
               </CardContent>
@@ -128,42 +127,45 @@ const Dashboard = () => {
 
             <Card>
               <CardHeader>
-                <CardTitle>Schedules Created (Monthly)</CardTitle>
+                <CardTitle>schedules Created (Monthly)</CardTitle>
               </CardHeader>
               <CardContent>
                 <ResponsiveContainer width="100%" height={250}>
-                  <BarChart data={monthlySchedules}>
+                  <BarChart data={schedulesCountLast3Months}>
                     <XAxis dataKey="month" />
                     <YAxis />
                     <Tooltip />
-                    <Bar dataKey="schedules" fill="#ffc658" />
+                    <Bar dataKey="count" fill="#ffc658" />
                   </BarChart>
                 </ResponsiveContainer>
               </CardContent>
             </Card>
           </div>
           <div>
-            <Card>
-              <CardHeader>
-                <CardTitle>User Growth (Monthly)</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ResponsiveContainer width="100%" height={250}>
-                  <LineChart data={userGrowth}>
-                    <XAxis dataKey="month" />
-                    <YAxis />
-                    <Tooltip />
-                    <Line
-                      type="monotone"
-                      dataKey="growth"
-                      stroke="#8884d8"
-                      strokeWidth={2}
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
-              </CardContent>
-            </Card>
+          <Card>
+      <CardHeader>
+        <CardTitle>User Growth (Monthly)</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <ResponsiveContainer width="100%" height={250}>
+          <LineChart data={newUsersLast3Months}>
+            {/* Hiển thị tháng chính xác */}
+            <XAxis dataKey="month" tickFormatter={(month) => month} />
+            <YAxis />
+            <Tooltip />
+            <Line
+              type="monotone"
+              dataKey="count"
+              stroke="#8884d8"
+              strokeWidth={2}
+            />
+          </LineChart>
+        </ResponsiveContainer>
+      </CardContent>
+    </Card>
           </div>
+
+
         </div>
       </div>
     </div>
