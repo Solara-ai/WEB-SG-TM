@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import Header from "../../components/Header/Header";
+import { getTotalUsers,getUsersWithSchedules,getUsersWithConversationPercentage,getChatCountLast7Days,getSchedulesCountLast3Months,getNewUsersLast3Months  } from "../../services/stats_service"; // Gọi API từ file service
+import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/card";
+import { motion } from "framer-motion";
+import { User, CalendarCheck } from "lucide-react";
+
 import {
   BarChart,
   Bar,
@@ -11,54 +16,41 @@ import {
   LineChart,
   Line,
 } from "recharts";
-import { motion } from "framer-motion";
-import { getUserStats, usersData } from "../../services/userService";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "../../components/ui/card";
-import { User, CalendarCheck } from "lucide-react";
-
-// const COLORS = ["#8884d8", "#82ca9d"];
-
 const Dashboard = () => {
-  const [totalUsers, setTotalUsers] = useState(0);
-  const [usersWithSchedules, setUsersWithSchedules] = useState(0);
-  const [usersWithoutSchedules, setUsersWithoutSchedules] = useState(0);
-  const [dailySchedules, setDailySchedules] = useState([]);
-  const [monthlySchedules, setMonthlySchedules] = useState([]);
+  const [totalUsers, setTotalUsers] = useState(null); // Để null thay vì 0 ban đầu
+  const [Userschedule, setUserschedule] = useState(null);
+  const [userconversation, setUserconversation] = useState([]);
+  const [chatCountLast7Days, setChatCountLast7Days] = useState([]);
+  const [schedulesCountLast3Months, setSchedulesCountLast3Months] = useState([]);
+  const [newUsersLast3Months, setNewUsersLast3Months] = useState([]);
+
+  // định nghĩa dữ liệu tĩnhh
   const [userGrowth, setUserGrowth] = useState([]);
 
+
   useEffect(() => {
-    const stats = getUserStats();
-    setTotalUsers(usersData.length);
-    setUsersWithSchedules(stats.usersWithSchedules);
-    setUsersWithoutSchedules(usersData.length - stats.usersWithSchedules);
+    const fetch = async () => {
+      const total = await getTotalUsers();
+      setTotalUsers(total); // Trả về giá trị chính xác từ API
 
-    setDailySchedules(
-      Object.entries(stats.schedulesByDate)
-        .map(([date, schedules]) => ({
-          day: new Date(date).toLocaleDateString("en-US", {
-            weekday: "short",
-            month: "short",
-            day: "numeric",
-          }),
-          schedules,
-        }))
-        .slice(-7)
-    );
+      const userschedule = await getUsersWithSchedules();
+      setUserschedule(userschedule);
 
-    setMonthlySchedules(
-      Object.entries(stats.schedulesByMonth).map(([month, schedules]) => ({
-        month,
-        schedules,
-      }))
-    );
+      const conversation = await getUsersWithConversationPercentage();
+      setUserconversation(conversation);
 
-    setUserGrowth(stats.userGrowthByMonth);
+      const chatCount = await getChatCountLast7Days();
+      setChatCountLast7Days(chatCount);
+
+      const schedulesCount = await getSchedulesCountLast3Months();
+      setSchedulesCountLast3Months(schedulesCount);
+
+      const newUsers = await getNewUsersLast3Months();
+      setNewUsersLast3Months(newUsers);
+    };
+    fetch();
   }, []);
+
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -66,7 +58,7 @@ const Dashboard = () => {
       <div className="flex-1 flex flex-col overflow-hidden">
         <Header className="sticky top-0 z-50 bg-white shadow-xl" />
         <div className="flex-1 overflow-auto p-6 space-y-6">
-          <motion.div
+        <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
@@ -77,25 +69,28 @@ const Dashboard = () => {
           </motion.div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
             <Card>
               <CardHeader>
                 <CardTitle>Total Users</CardTitle>
               </CardHeader>
               <CardContent className="flex items-center space-x-4">
                 <User className="w-10 h-10 text-blue-500" />
-                <span className="text-2xl font-bold">{totalUsers}</span>
+                <span className="text-2xl font-bold">
+                  {totalUsers !== null ? totalUsers : "Loading..."} {/* Hiển thị "Loading..." khi API chưa trả về */}
+                </span>
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader>
-                <CardTitle>Users with Schedules</CardTitle>
+                <CardTitle>Users without Schedules</CardTitle>
               </CardHeader>
               <CardContent className="flex items-center space-x-4">
                 <CalendarCheck className="w-10 h-10 text-green-500" />
                 <span className="text-2xl font-bold">
-                  {usersWithSchedules} (
-                  {((usersWithSchedules / totalUsers) * 100).toFixed(1)}%)
+                  {Userschedule} (
+                  {((Userschedule / totalUsers) * 100).toFixed(1)}%)
                 </span>
               </CardContent>
             </Card>
