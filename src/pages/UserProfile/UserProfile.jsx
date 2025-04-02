@@ -1,21 +1,47 @@
-import { useState } from "react";
-import { FaCamera, FaEnvelope, FaPhone, FaMapMarkerAlt } from "react-icons/fa";
+import { useState, useEffect } from "react";
+import { FaCamera, FaEnvelope, FaPhone, FaBirthdayCake, FaUserTie, FaHeart } from "react-icons/fa";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import Header from "../../components/Header/Header";
+import { getProfile } from "../../api/ProfileApi";
 
 const UserProfile = () => {
   const [profile, setProfile] = useState({
-    name: "Solara",
-    email: "Solara@example.com",
-    phone: "+84 (987) 12-3456",
-    address: "Trinh Van Bo Street, Ha Noi City",
-    role: "Administrator",
-    avatar: "./Logo.png",
+    fullName: "",
+    email: "",
+    phone: "",
+    birthday: "",
+    gender: "",
+    hobbies: "",
+    occupation: ""
   });
+
+  useEffect(() => {
+    const loadProfile = async () => {
+      try {
+        const response = await getProfile();
+        if (response && response.isSuccess()) {
+          const profileData = response.data; // Lấy profile từ BaseResponse
+          setProfile({
+            fullName: profileData.fullName,
+            email: profileData.email,
+            phone: profileData.phone,
+            birthday: profileData.birthday,
+            gender: profileData.gender,
+            hobbies: profileData.hobbies,
+            occupation: profileData.occupation,
+          });
+        } else {
+          console.error("Failed to fetch profile data");
+        }
+      } catch (error) {
+        console.error("Error fetching profile:", error);
+      }
+    };
+    loadProfile();
+  }, []);
 
   const handleUpdateProfile = (e) => {
     e.preventDefault();
-    // Handle profile update logic here
     alert("Profile updated successfully!");
   };
 
@@ -27,12 +53,11 @@ const UserProfile = () => {
         <div className="flex-1 p-6">
           <div className="max-w-4xl mx-auto">
             <div className="bg-white rounded-xl shadow-md overflow-hidden">
-              {/* Profile Header */}
               <div className="relative h-48 bg-gradient-to-r from-gray-500 to-white-600">
                 <div className="absolute -bottom-16 left-8">
                   <div className="relative">
                     <img
-                      src={profile.avatar}
+                      src="./Logo.png"
                       alt="Profile"
                       className="w-32 h-32 rounded-full border-4 border-white object-cover"
                     />
@@ -43,31 +68,24 @@ const UserProfile = () => {
                 </div>
               </div>
 
-              {/* Profile Content */}
               <div className="pt-20 px-8 pb-8">
                 <form onSubmit={handleUpdateProfile}>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Full Name
-                      </label>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
                       <input
                         type="text"
-                        value={profile.name}
-                        onChange={(e) =>
-                          setProfile({ ...profile, name: e.target.value })
-                        }
+                        value={profile.fullName}
+                        onChange={(e) => setProfile({ ...profile, fullName: e.target.value })}
                         className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Role
-                      </label>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Gender</label>
                       <input
                         type="text"
-                        value={profile.role}
+                        value={profile.gender}
                         readOnly
                         className="w-full p-3 border rounded-lg bg-gray-100"
                       />
@@ -76,15 +94,11 @@ const UserProfile = () => {
                     <div className="flex items-center space-x-3">
                       <FaEnvelope className="text-gray-400" />
                       <div className="flex-1">
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Email
-                        </label>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
                         <input
                           type="email"
                           value={profile.email}
-                          onChange={(e) =>
-                            setProfile({ ...profile, email: e.target.value })
-                          }
+                          onChange={(e) => setProfile({ ...profile, email: e.target.value })}
                           className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                         />
                       </div>
@@ -93,32 +107,50 @@ const UserProfile = () => {
                     <div className="flex items-center space-x-3">
                       <FaPhone className="text-gray-400" />
                       <div className="flex-1">
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Phone
-                        </label>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Phone</label>
                         <input
                           type="tel"
                           value={profile.phone}
-                          onChange={(e) =>
-                            setProfile({ ...profile, phone: e.target.value })
-                          }
+                          onChange={(e) => setProfile({ ...profile, phone: e.target.value })}
                           className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                         />
                       </div>
                     </div>
 
-                    <div className="md:col-span-2 flex items-center space-x-3">
-                      <FaMapMarkerAlt className="text-gray-400" />
+                    <div className="flex items-center space-x-3">
+                      <FaBirthdayCake className="text-gray-400" />
                       <div className="flex-1">
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Address
-                        </label>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Birthday</label>
+                        <input
+                          type="date"
+                          value={profile.birthday}
+                          onChange={(e) => setProfile({ ...profile, birthday: e.target.value })}
+                          className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="flex items-center space-x-3">
+                      <FaHeart className="text-gray-400" />
+                      <div className="flex-1">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Hobbies</label>
                         <input
                           type="text"
-                          value={profile.address}
-                          onChange={(e) =>
-                            setProfile({ ...profile, address: e.target.value })
-                          }
+                          value={profile.hobbies}
+                          onChange={(e) => setProfile({ ...profile, hobbies: e.target.value })}
+                          className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="flex items-center space-x-3">
+                      <FaUserTie className="text-gray-400" />
+                      <div className="flex-1">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Occupation</label>
+                        <input
+                          type="text"
+                          value={profile.occupation}
+                          onChange={(e) => setProfile({ ...profile, occupation: e.target.value })}
                           className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                         />
                       </div>

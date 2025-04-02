@@ -10,7 +10,7 @@ export class BaseResponse {
     static fromJson(json) {
         return new BaseResponse(json.httpStatus,json.resultCode, json.resultMsg, json.resourceId, json.data);
     }
-
+ 
     isSuccess() {
         return this.httpStatus === 200 || this.resultCode === 201;
     }
