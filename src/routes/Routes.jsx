@@ -28,12 +28,20 @@ const AuthChecker = () => {
 
   useEffect(() => {
     const token = getToken();
+
     if (!token) {
-      console.warn("No token found! Redirecting to login...");
+      console.warn("No valid token found! Redirecting to login...");
       navigate("/login");
-    }
-    else {
-      setLoading(false); 
+    } else {
+      // Kiểm tra nếu token có thể đã hết hạn
+      const isTokenExpired = checkTokenExpiration(token);
+      if (isTokenExpired) {
+        console.warn("Token expired! Redirecting to login...");
+        localStorage.removeItem("token"); // Xóa token hết hạn
+        navigate("/login");
+      } else {
+        setLoading(false);
+      }
     }
   }, [navigate]);
 
@@ -42,7 +50,20 @@ const AuthChecker = () => {
   }
 
   return null;
+}
+
+// ✅ Hàm kiểm tra token có hết hạn không
+const checkTokenExpiration = (token) => {
+  try {
+    const payload = JSON.parse(atob(token.split(".")[1])); // Giải mã JWT token
+    const exp = payload.exp * 1000; // Chuyển đổi thời gian hết hạn từ giây sang mili giây
+    return Date.now() > exp; // Nếu thời gian hiện tại vượt quá thời gian hết hạn => token hết hạn
+  } catch (error) {
+    console.error("Invalid token format:", error);
+    return true; // Nếu có lỗi khi kiểm tra, coi như token không hợp lệ
+  }
 };
+
 
 const AppRouter = () => {
   return (

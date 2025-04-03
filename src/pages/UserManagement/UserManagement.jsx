@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import { FaSearch, FaEllipsisV } from "react-icons/fa";
+import { FaSearch, FaEllipsisV, FaPlus } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import Header from "../../components/Header/Header";
-import { getAllUsers } from "../../api/UserApi";
+import { getAllUsers, createUser } from "../../api/UserApi";
 
 const UserManagement = () => {
   const [search, setSearch] = useState("");
@@ -11,6 +11,19 @@ const UserManagement = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [openMenu, setOpenMenu] = useState(null);
+  const [isAddUserModalOpen, setIsAddUserModalOpen] = useState(false);
+  const [newUser, setNewUser] = useState({
+    fullName: "",
+    email: "",
+    password: "",
+    phoneNumber: "",
+    authority: ["USER"],
+    birthday: "",
+    gender: "",
+    hobbies: "",
+    occupation: ""
+  });
+  
 
   useEffect(() => {
     async function fetchUsers() {
@@ -39,12 +52,45 @@ const UserManagement = () => {
     currentPage * itemsPerPage
   );
 
+  const handleAddUser = async () => {
+    console.log('Adding user with data:', newUser);
+  
+    const response = await createUser(newUser);
+    console.log('Create user response:', response);
+    
+    if (response && response.isSuccess()) {
+      setIsAddUserModalOpen(false);
+      setNewUser({
+        fullName: "",
+        email: "",
+        password: "",
+        phoneNumber: "",
+        authority: ["USER"],
+        birthday: "",
+        gender: "",
+        hobbies: "",
+        occupation: ""
+      });
+    } else {
+      console.error("Failed to create user:", response ? response.resultMsg : "No response from API");
+    }
+  }; 
+  
   return (
     <div className="flex h-screen bg-gray-100 overflow-hidden">
       <Sidebar />
       <div className="flex-1 flex flex-col relative">
         <Header />
         <div className="container mx-auto p-6">
+        <div className="mb-4 flex items-center justify-between">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              className="bg-blue-500 text-white px-4 py-2 rounded-lg flex items-center space-x-2 shadow"
+              onClick={() => setIsAddUserModalOpen(true)}
+            >
+              <FaPlus /> <span>Add User</span>
+            </motion.button>
+          </div>
           {/* Search & Pagination Container */}
           <motion.div className="mb-4 flex items-center justify-end space-x-4">
             <select
@@ -202,6 +248,116 @@ const UserManagement = () => {
               Next
             </button>
           </div>
+
+          {isAddUserModalOpen && (
+            <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
+              <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+                <h2 className="text-xl font-semibold mb-4">Add New User</h2>
+                <input
+                  type="text"
+                  placeholder="Full Name"
+                  value={newUser.fullName}
+                  onChange={(e) =>
+                    setNewUser({ ...newUser, fullName: e.target.value })
+                  }
+                  className="w-full p-2 border rounded mb-2"
+                />
+                <input
+                  type="email"
+                  placeholder="Email"
+                  value={newUser.email}
+                  onChange={(e) =>
+                    setNewUser({ ...newUser, email: e.target.value })
+                  }
+                  className="w-full p-2 border rounded mb-2"
+                />
+                <input
+                  type="password"
+                  placeholder="Password"
+                  value={newUser.password}
+                  onChange={(e) =>
+                    setNewUser({ ...newUser, password: e.target.value })
+                  }
+                  className="w-full p-2 border rounded mb-2"
+                />
+                <input
+                  type="text"
+                  placeholder="Phone Number"
+                  value={newUser.phoneNumber}
+                  onChange={(e) =>
+                    setNewUser({ ...newUser, phoneNumber: e.target.value })
+                  }
+                  className="w-full p-2 border rounded mb-2"
+                />
+                <input
+                  type="text"
+                  placeholder="Birthday"
+                  value={newUser.birthday}
+                  onChange={(e) =>
+                    setNewUser({ ...newUser, birthday: e.target.value })
+                  }
+                  className="w-full p-2 border rounded mb-2"
+                />
+                <input
+                  type="text"
+                  placeholder="Gender"
+                  value={newUser.gender}
+                  onChange={(e) =>
+                    setNewUser({ ...newUser, gender: e.target.value })
+                  }
+                  className="w-full p-2 border rounded mb-2"
+                />
+                <input
+                  type="text"
+                  placeholder="Hobbies"
+                  value={newUser.hobbies}
+                  onChange={(e) =>
+                    setNewUser({ ...newUser, hobbies: e.target.value })
+                  }
+                  className="w-full p-2 border rounded mb-2"
+                />
+                <input
+                  type="text"
+                  placeholder="Occupation"
+                  value={newUser.occupation}
+                  onChange={(e) =>
+                    setNewUser({ ...newUser, occupation: e.target.value })
+                  }
+                  className="w-full p-2 border rounded mb-2"
+                />
+                <div className="mb-4">
+                  <label htmlFor="authority" className="block mb-2">
+                    Authority
+                  </label>
+                  <select
+                    id="authority"
+                    value={newUser.authority}
+                    onChange={(e) =>
+                      setNewUser({ ...newUser, authority: e.target.value })
+                    }
+                    className="w-full p-2 border rounded"
+                  >
+                    <option value="USER">USER</option>
+                    <option value="ADMIN">ADMIN</option>
+                  </select>
+                </div>
+                <div className="flex justify-end space-x-2">
+                  <button
+                    onClick={() => setIsAddUserModalOpen(false)}
+                    className="bg-gray-400 text-white px-4 py-2 rounded"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleAddUser}
+                    className="bg-blue-500 text-white px-4 py-2 rounded"
+                  >
+                    Add
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

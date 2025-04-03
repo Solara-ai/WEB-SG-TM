@@ -45,3 +45,40 @@ export async function callApi(endpoint, method = "GET", bodyData = null) {
         return null;
     }
 }
+
+export async function postData(endpoint, bodyData) {
+    try {
+        const headers = { "Content-Type": "application/json" };
+        const token = getToken();
+
+        if (token) {
+            headers["Authorization"] = `Bearer ${token}`;
+        }
+
+        const options = {
+            method: "POST",
+            headers,
+            mode: "cors",
+            body: JSON.stringify(bodyData),
+        };
+
+        const response = await fetch(`${BASE_URL}${endpoint}`, options);
+        const data = await response.json();
+
+        if (!response.ok) {
+            if (response.status === 401) {
+                console.warn("Unauthorized! Redirecting to login...");
+                localStorage.removeItem("token");
+                window.location.href = "/login";
+            }
+            showErrorPopup(data.message || "API request failed! Please try again.");
+            return null;
+        }
+
+        return data;
+    } catch (error) {
+        console.error("POST API Error:", error.message);
+        showErrorPopup("Something went wrong! Please check your connection.");
+        return null;
+    }
+}
