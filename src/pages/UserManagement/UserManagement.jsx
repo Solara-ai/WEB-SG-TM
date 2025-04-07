@@ -17,13 +17,12 @@ const UserManagement = () => {
     email: "",
     password: "",
     phoneNumber: "",
-    authority: ["USER"],
+    authority: ["ADMIN"],
     birthday: "",
     gender: "",
     hobbies: "",
-    occupation: ""
+    occupation: "",
   });
-  
 
   useEffect(() => {
     async function fetchUsers() {
@@ -53,36 +52,56 @@ const UserManagement = () => {
   );
 
   const handleAddUser = async () => {
-    console.log('Adding user with data:', newUser);
-  
+    if (
+      !newUser.fullName.trim() ||
+      !newUser.email.trim() ||
+      !newUser.password.trim() ||
+      !newUser.phoneNumber.trim() ||
+      !newUser.birthday.trim() ||
+      !newUser.gender.trim() ||
+      !newUser.hobbies.trim() ||
+      !newUser.occupation.trim() ||
+      newUser.authority.length === 0
+    ) {
+      alert("Please fill in all required fields before adding a user.");
+      return;
+    }
+
+    console.log("Adding user with data:", newUser);
+
     const response = await createUser(newUser);
-    console.log('Create user response:', response);
-    
+    console.log("Create user response:", response);
+
     if (response && response.isSuccess()) {
+      alert("User added successfully!");
       setIsAddUserModalOpen(false);
       setNewUser({
         fullName: "",
         email: "",
         password: "",
         phoneNumber: "",
-        authority: ["USER"],
+        authority: ["ADMIN"],
         birthday: "",
         gender: "",
         hobbies: "",
-        occupation: ""
+        occupation: "",
       });
     } else {
-      console.error("Failed to create user:", response ? response.resultMsg : "No response from API");
+      console.error(
+        "Failed to create user:",
+        response ? response.resultMsg : "No response from API"
+      );
+      alert("Failed to add user. Please try again.");
     }
-  }; 
-  
+  };
+
   return (
     <div className="flex h-screen bg-gray-100 overflow-hidden">
       <Sidebar />
       <div className="flex-1 flex flex-col relative">
         <Header />
         <div className="container mx-auto p-6">
-        <div className="mb-4 flex items-center justify-between">
+          <div className="mb-4 flex items-center justify-between">
             <motion.button
               whileHover={{ scale: 1.05 }}
               className="bg-blue-500 text-white px-4 py-2 rounded-lg flex items-center space-x-2 shadow"
@@ -120,7 +139,7 @@ const UserManagement = () => {
 
           <div className="overflow-auto bg-white shadow-lg rounded-lg max-h-[70vh]">
             <table className="w-full border-collapse text-left">
-              <thead className="sticky top-0 bg-gray-200 text-gray-700 uppercase text-sm">
+              <thead className="sticky top-0 bg-gray-200 text-gray-700 uppercase text-sm z-10">
                 <tr>
                   <th className="p-3 text-center">#</th>
                   <th className="p-3 text-center">Name</th>
@@ -132,7 +151,7 @@ const UserManagement = () => {
                   <th className="p-3 text-center">Actions</th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="bg-white divide-y divide-gray-200 relative z-0">
                 <AnimatePresence>
                   {paginatedUsers.length > 0 ? (
                     paginatedUsers.map((user, index) => (
@@ -141,7 +160,7 @@ const UserManagement = () => {
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}
-                        className="border-b transition cursor-pointer hover:shadow-md"
+                        className="border-b transition cursor-pointer hover:shadow-md relative z-0"
                       >
                         <td className="p-4 text-center font-medium text-gray-700">
                           {(currentPage - 1) * itemsPerPage + index + 1}
